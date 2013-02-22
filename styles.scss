@@ -1,0 +1,357 @@
+/*
+    Document   : styles
+    Created on : 13/02/2013, 3:39:39 PM
+    Author     : Justin Swan <jswan@skyreach.com.au>
+    Description:
+    Styles for Squid Proxy List Editor
+*/
+
+
+@mixin round_corners($top_left: 0.5em, $top_right:0.5em, $bottom_right: 0.5em, $bottom_left: 0.5em){
+    -webkit-border-top-left-radius: $top_left;
+    -webkit-border-top-right-radius: $top_right;
+    -webkit-border-bottom-right-radius: $bottom_right;
+    -webkit-border-bottom-left-radius: $bottom_left;
+    -moz-border-radius-topleft: $top_left;
+    -moz-border-radius-topright: $top_right;
+    -moz-border-radius-bottomright: $bottom_right;
+    -moz-border-radius-bottomleft: $bottom_left;
+    border-top-left-radius: $top_left;
+    border-top-right-radius: $top_right;
+    border-bottom-right-radius: $bottom_right;
+    border-bottom-left-radius: $bottom_left;
+}
+
+@mixin rounded($radius: 0.5em){
+    @include round_corners($radius,$radius,$radius,$radius);
+}
+
+@mixin opacity ( $value: 0.5 ) {
+    opacity: $value;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=" $value * 100 ")";
+    filter: alpha(opacity= $value * 100 );
+    zoom: 1;
+}
+
+@mixin box-shadow($top, $left, $blur, $color, $inset: false) {
+    @if $inset {
+        -webkit-box-shadow: inset $top $left $blur $color;
+        -moz-box-shadow: inset $top $left $blur $color;
+        box-shadow: inset $top $left $blur $color;
+        } @else {
+        -webkit-box-shadow: $top $left $blur $color;
+        -moz-box-shadow: $top $left $blur $color;
+        box-shadow: $top $left $blur $color;
+    }
+}
+@mixin bg_gradient($top_color,$bottom_color){
+    background-color: $top_color;
+    background-image: -webkit-gradient(linear, left top, left bottom, from($top_color), to($bottom_color)); /* Saf4+, Chrome */
+    background-image: -webkit-linear-gradient(top, $top_color, $bottom_color); /* Chrome 10+, Saf5.1+, iOS 5+ */
+    background-image:    -moz-linear-gradient(top, $top_color, $bottom_color); /* Firefox 3.6-15 */
+    background-image:      -o-linear-gradient(top, $top_color, $bottom_color); /* Opera 11.10+ */
+    background-image:         linear-gradient(to bottom, $top_color, $bottom_color); /* Firefox 16+ */
+}
+
+$bgcolor: #202020;
+body {
+    background-image: url('images/bg-blk.png');
+    background-color: $bgcolor;
+    font-family: Candara, Calibri, Segoe, "Segoe UI", Optima, Arial, sans-serif;
+}
+// reset
+body, div, a, header, footer, section, h1, h2, form, select, option, table, tr, td, th, img {
+    margin: 0;
+    padding: 0;
+    outline: none;
+    border: none;
+}
+header, nav, section, footer{
+    margin:0 auto 1em;
+    width: 75%;
+    padding: 0.4em;
+}
+
+header{
+
+    background-color: darken($bgcolor,15%);
+    background-image: url('images/darker_bg.gif');
+    @include box-shadow(0, 1px, 4px, lighten($bgcolor,15%));
+    @include round_corners(0,0,0.5em,0.5em);
+    width: 75%;
+    h1{
+        color: white;
+        font-family: "Avant Garde", Avantgarde, "Century Gothic", CenturyGothic, "AppleGothic", sans-serif;
+        font-size: 1.6em;
+        text-align: center;
+        padding: 0.8em 1em;
+    }
+}
+
+footer{
+    margin-bottom: 0;
+}
+// sections
+#growl{
+    display: none;
+    position: absolute;
+    top: 0;
+    left:0;
+    margin:0;
+    padding:0;
+    width: 100%;
+    clear: both;
+    text-align: center;
+    div{
+        position: fixed;
+        padding: 1em;
+        width: 50%;
+        margin:0 25%;
+        background-color: red;
+        color: white;
+        @include box-shadow(0, 1px, 4px, lighten($bgcolor,5%), true);
+        @include round_corners(0,0, 0.5em,0.5em);
+    }
+}
+#login form{
+    margin: 0 auto;
+    width: 60%;
+    background-color: lighten($bgcolor,15%);
+    padding: 5%;
+    @include box-shadow(0, 1px, 4px, lighten($bgcolor,5%), true);
+    @include round_corners(0.5em,0.5em,0.5em,0.5em);
+    clear: both;
+    .input_wrapper{
+        float: left;
+        width:90%;
+        color: white;
+        padding: 0.8em;
+        font-size: 1em;
+        background-color: lighten($bgcolor,5%);
+        @include box-shadow(0, 1px, 4px, lighten($bgcolor,5%));
+        margin: 0.2em;
+        label{
+            width: 100px;
+            float: left;
+            font-size: 1em;
+            line-height:1.1em;
+            padding:0.4em;
+            text-align: right;
+        }
+        input[type=text],input[type=password]{
+            border: none;
+            float: left;
+            width:60%;
+            background-color: lighten($bgcolor,10%);
+            @include box-shadow(0, 0, 2px, lighten($bgcolor,50%), true);
+            color: white;
+            font-size: 1em;
+            line-height:1.1em;
+            padding:0.4em;
+            margin-left: 1em;
+        }
+    }
+    .submit_wrapper{
+        margin: 0.2em;
+        padding: 0.8em;
+        width: 90%;
+        text-align: right;
+        float: left;
+        clear: both;
+        input[type=submit]{
+            float: right;
+            border: none;
+            background-color: lighten($bgcolor,5%);
+            color: white;
+            font-size: 1em;
+            line-height:1.1em;
+            padding:0.4em;
+            text-align: center;
+            @include box-shadow(0, 1px, 4px, lighten($bgcolor,5%));
+            &:hover{
+                color: darkorange;
+                cursor: pointer;
+            }
+        }
+    }
+}
+#list{
+    margin: 0 auto;
+    width: 60%;
+    background-color: lighten($bgcolor,15%);
+    padding: 1% 5%;
+    @include box-shadow(0, 1px, 4px, lighten($bgcolor,5%), true);
+    @include round_corners(0.5em,0.5em,0.5em,0.5em);
+    clear: both;
+}
+
+nav{
+    clear: both;
+    width: 100%;
+    font-size: 1em;
+    label{
+        float: left;
+        font-size: 14px;
+        line-height: 24px;
+        height: 24px;
+        margin-right: 3px;
+        color: white;
+    }
+    .field{
+        float: left;
+        margin-right: 20px;
+    }
+    .input_wrapper{
+        float: left;
+        padding:0.1em;
+        border: 1px solid #AAAAAA;
+        background-color: #FFFFFF;
+        cursor: text;
+        @include rounded(0.3em);
+        @include bg_gradient(#ffffff,#eeeeee);
+        @include box-shadow(0, 1px, 1px, #ffffff, true);
+        font-family: Candara,Calibri,Segoe,"Segoe UI",Optima,Arial,sans-serif;
+    }
+    input[type=text]{
+        background: none;
+        border: none;
+        line-height:18px;
+        height:18px;
+        width: 200px;
+        color: #444444;
+    }
+    input[type=image]{
+        margin-left: 5px;
+    }
+    select{
+        width: 150px;
+    }
+    input, select{
+        float: left;
+    }
+}
+#logged_in{
+    position: absolute;
+    top: 0;
+    right: 10px;
+    padding:0.4em 1.1em;
+    background-color: darken($bgcolor,15%);
+    background-image: url('images/darker_bg.gif');
+    color: white;
+    font-size:0.9em;
+    text-align: center;
+    text-decoration: none;
+    @include box-shadow(0, 1px, 4px, lighten($bgcolor,15%));
+    @include round_corners(0,0,0.6em,0.6em);
+    &:hover{
+        color: darkorange;
+    }
+}
+#list_container{
+    margin:0;
+    padding:0;
+    border: none;
+    background: none;
+    th{
+        background-color: lighten($bgcolor,10%);
+        @include bg_gradient(lighten($bgcolor,20%),darken($bgcolor,10%));
+        color: lighten($bgcolor,95%);
+    }
+    th, td{
+        text-align: left;
+        padding:0.1em 0.3em;
+    }
+    td{
+        font-size:0.8em;
+        color: white;
+    }
+    tr.even {background: lighten($bgcolor,35%);}
+    tr.odd {background: lighten($bgcolor,30%);}
+    tr:hover {background: lighten($bgcolor,50%);}
+}
+#change_list_form{
+    display: none;
+    position: relative;
+    float: left;
+    width: 500px;
+    padding:1.2em;
+    border:8px darken($bgcolor,2%) solid;
+    @include round_corners(0.8em,0.8em,0.8em,0.8em);
+    background-color: white;
+}
+#change_list_form, #multi_change_form{
+    label{
+        float: left;
+        font-size: 14px;
+        line-height: 26px;
+        height: 26px;
+        margin: 0 3px;
+    }
+    .input_wrapper{
+        float: left;
+        position: relative;
+        padding:0.2em;
+        border: 1px solid #AAAAAA;
+        background-color: #FFFFFF;
+        cursor: text;
+        @include rounded(0.4em);
+        @include bg_gradient(#ffffff,#eeeeee);
+        @include box-shadow(0, 1px, 1px, #ffffff, true);
+        font-family: Candara,Calibri,Segoe,"Segoe UI",Optima,Arial,sans-serif;
+    }
+    .select_wrapper{
+        float: left;
+        position: relative;
+        padding:0em;
+        border: none;
+        background-color: #ffffff;
+        cursor: text;
+
+        font-family: Candara,Calibri,Segoe,"Segoe UI",Optima,Arial,sans-serif;
+    }
+    #change_list_input{
+        float: left;
+        background: none;
+        border: none;
+        line-height:16px;
+        height:16px;
+        width: 200px;
+        color: #444444;
+    }
+    #change_list_save{
+        float: left;
+        padding:0.2em;
+    }
+    select{
+        width:150px;
+        vertical-align: baseline;
+        position: top;
+        background-color: red;
+    }
+}
+#multi_change_form{
+    float: right;
+    text-align: left;
+    width: 100%;
+    margin:0;
+    padding:1em 0;
+    border: none;
+    display: block;
+    clear: both;
+
+    form{
+        @include round_corners(0.4em,0.4em,0.4em,0.4em);
+        background-color: lighten($bgcolor,15%);
+        float: right;
+        padding:0.4em 0.3em 0.3em;
+        label {color: white;}
+        .select_wrapper{background-color: lighten($bgcolor,15%);}
+    }
+}
+.chzn-container .chzn-results { clear: both; }
+.close_label {
+    position: absolute;
+    right: -20px;
+    top: -20px;
+    outline: none;
+}

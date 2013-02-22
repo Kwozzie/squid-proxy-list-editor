@@ -1,0 +1,25 @@
+Squid Proxy List Editor
+-----------------------
+NB: Still in Development.
+Writing lists to file is working but is yet to be tested on a production server with Squid running.
+
+These scripts were set up and tested with PHP v5.4.6, MySQL 5.5.29
+
+
+Setup
+-----------------------
+The access list files symlinked from your web home directory.
+eg.
+lrwxrwxrwx 1 root root 28 Feb 22 08:53 allowedsites.txt -> /etc/squid3/allowedsites.txt
+lrwxrwxrwx 1 root root 28 Feb 22 08:53 blockedsites.txt -> /etc/squid3/blockedsites.txt
+lrwxrwxrwx 1 root root 29 Feb 22 08:53 exceptedsites.txt -> /etc/squid3/exceptedsites.txt
+lrwxrwxrwx 1 root root 29 Feb 22 08:53 prioritysites.txt -> /etc/squid3/prioritysites.txt
+
+Your database and path locations added to ple_config.php.
+Your own username, hash and salt added/changed in login.php
+
+ToDo
+-----------------------
+Security needs to be considered further.
+Test in live environment
+Test cross browser (have tested in IE 8, Ubuntu Firefox v19 and Chromium)
