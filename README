@@ -1,5 +1,8 @@
 Squid Proxy List Editor
 -----------------------
+Web interface for adding/deleting domains in Squid Proxy txt lists via PHP/MySQL.
+With user login facility.
+
 NB: Still in Development.
 Writing lists to file is working but is yet to be tested on a production server with Squid running.
 
