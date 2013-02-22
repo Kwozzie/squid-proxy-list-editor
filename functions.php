@@ -131,18 +131,33 @@ function get_proxy_list($list_id){
 function add_new_domain($new_domain, $list){
     global $errors, $db, $response;
 
-    $new_domain = strtolower(trim($new_domain));
+     // remove https:// http:// and www and clean up input, prevent all that yucky whitespace and CAPS LOCK
+     $new_domain = str_replace(array("http://","https://","www"),"",strtolower(trim($new_domain)));
 
-    // remove https:// http:// and www
-    $new_domain = str_replace(array("http://","https://","www"),"",$new_domain);
+    // check if the domain actually exists.
     if(!checkdnsrr(ltrim($new_domain,"."))){
         array_push($errors,$new_domain." doesn't exist");
         return false;
     }
 
+    // make sure the domain has a leading "."
     if(substr($new_domain,0,1) != ".") $new_domain = ".".$new_domain;
 
-    $sql = "SELECT * FROM proxy_domains JOIN access_lists ON proxy_domains.access_list = access_lists.id WHERE domain = ".$db->filter($new_domain,"text");
+     /*
+     * this section might be wrong depending on how the ACL is set up? Block addition if in another list or allow and provide notice?
+     * for our purposes, we'll block the addition
+     */
+
+    // build array of parent names to check (eg if domain is calendar.google.com, we should check that it's not already covered by google.com)
+    // maybe it could be done better with string and substr replacements?
+    $domain_segments = explode(".",ltrim($new_domain,".")); // split domain into segments
+    $check_domains = array();
+    foreach($domain_segments as $seg){
+        $check_domains[] = $db->filter(".".implode(".",$domain_segments),"text"); // join what's left of segments together
+        array_shift($domain_segments); // remove first element from array so that next iteration implodes only what's left.;
+    }
+
+    $sql = "SELECT * FROM proxy_domains JOIN access_lists ON proxy_domains.access_list = access_lists.id WHERE domain IN (".implode(",",$check_domains).")";
     $result = $db->query($sql);
     if(!$result) {
         array_push($errors,"Database error: ".$db->error);
@@ -154,13 +169,15 @@ function add_new_domain($new_domain, $list){
         while($list = $result->fetch_assoc()){
             array_push($lists,$list['list_name']);
         }
-        array_push($errors,"This domain is already listed in '".implode(",",$lists)."'");
+        array_push($errors,"This domain (or a parent) is already listed in '".implode(",",$lists)."'");
         $result->close();
         return false;
     }
     $result->close();
 
-
+    /*
+     * end of blocking existing domains.
+    */
 
     // all checks passed, do the insert
     $insert_sql = "INSERT INTO proxy_domains (domain, access_list) VALUES (".$db->filter($new_domain,"text").",".$db->filter($list,"int").")";
