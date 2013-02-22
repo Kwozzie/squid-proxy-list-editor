@@ -8,7 +8,9 @@ These scripts were set up and tested with PHP v5.4.6, MySQL 5.5.29
 
 Setup
 -----------------------
-The access list files symlinked from your web home directory.
+Create the database using setup-database.sql
+
+Symlink the access lists to your web directory.
 eg.
 lrwxrwxrwx 1 root root 28 Feb 22 08:53 allowedsites.txt -> /etc/squid3/allowedsites.txt
 lrwxrwxrwx 1 root root 28 Feb 22 08:53 blockedsites.txt -> /etc/squid3/blockedsites.txt
