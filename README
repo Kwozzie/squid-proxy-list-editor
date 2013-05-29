@@ -23,8 +23,11 @@ lrwxrwxrwx 1 root root 29 Feb 22 08:53 prioritysites.txt -> /etc/squid3/priority
 Your database and path locations added to ple_config.php.
 Your own username, hash and salt added/changed in login.php
 
-ToDo
------------------------
-Security needs to be considered further.
-Test in live environment
-Test cross browser (have tested in IE 8, Ubuntu Firefox v19 and Chromium)
+For the Squid3 reconfigure (to reload the access lists) you will need to add an
+entry to /etc/sudoers for this to work, and restrict security problems
+
+visudo /etc/sudoers
+then add the following two lines.
+
+# Allow www-data to reconfigure (reload cache?) of Squid
+www-data ALL = NOPASSWD:/var/www/lists/restartsquid.sh

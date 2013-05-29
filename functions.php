@@ -13,6 +13,7 @@ $errors = array();
 $response = "";
 
 if(!isset($_SESSION['proxy_editor_admin'])) array_push($errors,"You must be logged in to perform this action <script>window.location = 'login.php?out';</script>.");
+include dirname(__FILE__)."/restartsquid.php";
 include dirname(__FILE__)."/mydb.php";
 $db = new mydb();
 
@@ -91,6 +92,14 @@ function regenerate_lists(){
         fclose($fp);
 
     }
+
+    // now reconfigure squid to reload the lists
+    $reloaded = restartSquid();
+    if (!empty($reloaded)) {
+        array_push($errors, "Failed to reload squid: ".$reloaded);
+	return false;
+    }
+
     $response = "ok";
 
 
@@ -135,11 +144,12 @@ function add_new_domain($new_domain, $list){
      $new_domain = str_replace(array("http://","https://","www"),"",strtolower(trim($new_domain)));
 
     // check if the domain actually exists.
+/*
     if(!checkdnsrr(ltrim($new_domain,"."))){
         array_push($errors,$new_domain." doesn't exist");
         return false;
     }
-
+*/
     // make sure the domain has a leading "."
     if(substr($new_domain,0,1) != ".") $new_domain = ".".$new_domain;
 
